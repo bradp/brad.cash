@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pay Brad</title>
+	<style>
+		body {
+			background-color: #b2bec3
+		}
+
+		.form {
+		  margin: 0 auto;
+		  padding: 2em;
+		  text-align: center;
+		}
+
+		#amount {
+		  	font-size: 2em;
+		  	padding: .5em;
+		  	margin: 1em;
+	</style>
+</head>
+<body>
+	<div class="form">
+		<input type="text" id="amount" placeholder="Enter amount" value="">
+		<div id="paypal-button-container"></div>
+		<script src="https://www.paypal.com/sdk/js?client-id=AcHYZB8St2wqbQwGqoqGDTMeVKaT3m5svWuSGPYttbzPwsYZl-yRsiGs1hHrfaYoXRXOWsCdkL81OWQD&currency=USD" data-sdk-integration-source="button-factory"></script>
+		<script>
+		    paypal.Buttons({
+		        style: {
+		            shape: 'rect',
+		            color: 'black',
+		            layout: 'vertical',
+		            label: 'pay',
+
+		        },
+		        createOrder: function(data, actions) {
+		            return actions.order.create({
+		                purchase_units: [{
+		                    amount: {
+		                        value: document.getElementById("amount").value
+		                    }
+		                }]
+		            });
+		        },
+		        onApprove: function(data, actions) {
+		            return actions.order.capture().then(function(details) {
+		                alert('Transaction completed by ' + details.payer.name.given_name + '!');
+		            });
+		        }
+		    }).render('#paypal-button-container');
+		</script>
+	</div>
+</body>
+</html>
